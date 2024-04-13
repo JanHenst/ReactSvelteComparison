@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from "react";
+import React, {FC, useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import useUserId from "../hooks/user-id.hook.ts";
 
@@ -42,12 +42,6 @@ export const Register: FC = () => {
             setError('Failed to register')
         }
     };
-
-    useEffect(() => {
-        if (error != '') {
-            console.error('Failed to register', error);
-        }
-    }, [error]);
 
     return (
         <form className="max-w-sm w-full mx-auto" onSubmit={handleSubmit}>

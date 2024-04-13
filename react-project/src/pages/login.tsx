@@ -27,7 +27,6 @@ export const Login: FC = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(data)
                 setUserId(data.id);
                 navigate('/todo');
             } else {

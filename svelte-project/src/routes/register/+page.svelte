@@ -1,9 +1,10 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
-    import { userId } from "../store/userid.ts";
+    import { userId } from "../../store/userid.ts";
 
     let username = '';
     let password = '';
+    let repeatPassword = '';
     let error = '';
     const normalInputClasses = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
     const errorInputClasses = "bg-red-50 border border-red-500 text-red-900 text-sm rounded-lg focus:ring-red-500 focus:border-red-500 block w-full p-2.5"
@@ -13,24 +14,29 @@
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
 
+        if (password !== repeatPassword) {
+            error = 'Passwords do not match';
+            return;
+        }
+
         try {
-            const response = await fetch('http://localhost:3000/users/login', {
+            const response = await fetch('http://localhost:3000/users/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({username, password})
+                body: JSON.stringify({ username, password })
             });
 
             if (response.ok) {
                 const data = await response.json();
                 $userId = data.id;
-                await goto("/todo");
+                await goto('/todo');
             } else {
-                error = 'Failed to login';
+                error = 'Failed to register';
             }
         } catch (error) {
-            error = 'Failed to login';
+            error = 'Failed to register';
         }
     };
 </script>
@@ -54,14 +60,22 @@
                    bind:value={password}
                    required/>
         </div>
+        <div class="mb-5">
+            <label for="repeatPassword" class={error ? errorTextClasses : normalTextClasses}>
+                Repeat password</label>
+            <input type="password" id="repeatPassword"
+                   class={error ? errorInputClasses : normalInputClasses}
+                   bind:value={repeatPassword}
+                   required/>
+        </div>
         {#if error}
             <p class="text-red-700 text-sm font-medium mb-5">{error}</p>
         {/if}
         <div class="mb-5">
-            <a href="/register" class="text-blue-700 hover:underline">Make an account</a>
+            <a href="/" class="text-blue-700 hover:underline">Login</a>
         </div>
         <button type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Login
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Register
         </button>
     </form>
 </div>
