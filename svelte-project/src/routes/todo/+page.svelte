@@ -4,13 +4,20 @@
     import { userId } from "../../store/userid.ts";
     import TodoItem from "./TodoItem.svelte";
 
+    userId.load();
     let todos: Todo[] = [];
     let newTodo: Todo = { id: 0, task: '', status: 'active' };
 
     onMount(() => {
+        console.log("HELLO")
+        console.log('User ID:', $userId)
+        console.log("Todos:", todos)
+
         fetch(`http://localhost:3000/users/${$userId}/todos`)
             .then(response => response.json())
             .then(data => todos = data);
+
+        console.log("Todos grapped now cool:", todos)
     });
 
     const addTodo = () => {

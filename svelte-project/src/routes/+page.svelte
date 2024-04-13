@@ -1,6 +1,7 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { userId } from "../store/userid.ts";
+    userId.set(0)
 
     let username = '';
     let password = '';
@@ -24,7 +25,7 @@
 
             if (response.ok) {
                 const data = await response.json();
-                $userId = data.id;
+                userId.set(data.id)
                 await goto("/todo");
             } else {
                 error = 'Failed to login';
